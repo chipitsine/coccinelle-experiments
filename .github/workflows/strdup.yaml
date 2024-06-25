@@ -1,0 +1,26 @@
+name: cocci
+
+on: 
+  workflow_dispatch:
+    inputs:
+      repo:
+        type: string
+        description: Specify repo to scan
+
+permissions:
+  contents: read
+
+jobs:
+  coccinelle:
+      name: strdup
+      runs-on: ubuntu-latest
+      steps:
+      - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y coccinelle
+      - name: Run
+        run: |
+          git clone --recursive ${{ github.event.inputs.repo }}
+          spatch --sp-file strdup.cocci --dir .
