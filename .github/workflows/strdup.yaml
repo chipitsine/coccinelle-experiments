@@ -6,6 +6,9 @@ on:
       repo:
         type: string
         description: Specify repo to scan
+      branch:
+        type: string
+        description: Specify branch to scan
 
 permissions:
   contents: read
@@ -22,5 +25,5 @@ jobs:
           sudo apt-get install -y coccinelle
       - name: Run
         run: |
-          git clone --recursive ${{ github.event.inputs.repo }}
+          git clone -b ${{ github.event.inputs.branch }} --recursive ${{ github.event.inputs.repo }}
           spatch --sp-file strdup.cocci --dir .
